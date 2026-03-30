@@ -130,7 +130,7 @@ open up localhost:
    - OPENAI_API_KEY
 
 
-# 8. Demo
+# 8. Overview
 
 <img width="1424" height="807" alt="Screenshot 2026-03-30 at 2 07 25 PM" src="https://github.com/user-attachments/assets/8fb0e80b-9565-43c9-81f8-b6ee7b6a606f" />
 
