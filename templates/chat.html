@@ -1,81 +1,243 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Chatbot</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
-	</head>
-	
-	
-	<body>
-		<div class="container-fluid h-100">
-			<div class="row justify-content-center h-100">		
-				<div class="col-md-8 col-xl-6 chat">
-					<div class="card">
-						<div class="card-header msg_head">
-							<div class="d-flex bd-highlight">
-								<div class="img_cont">
-									<img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img">
-									<!-- <img src="https://www.prdistribution.com/spirit/uploads/pressreleases/2019/newsreleases/d83341deb75c4c4f6b113f27b1e42cd8-chatbot-florence-already-helps-thousands-of-patients-to-remember-their-medication.png" class="rounded-circle user_img"> -->
-									<span class="online_icon"></span>
-								</div>
-								<div class="user_info">
-									<span>Medical Chatbot</span>
-									<p>Ask me anything!</p>
-								</div>
-							</div>
-						</div>
-						<div id="messageFormeight" class="card-body msg_card_body">
-							
-							
-						</div>
-						<div class="card-footer">
-							<form id="messageArea" class="input-group">
-                                <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
-								<div class="input-group-append">
-									<button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<script>
-			$(document).ready(function() {
-				$("#messageArea").on("submit", function(event) {
-					const date = new Date();
-					const hour = date.getHours();
-					const minute = date.getMinutes();
-					const str_time = hour+":"+minute;
-					var rawText = $("#text").val();
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CarePlus Medical UI</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
 
-					var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg"></div></div>';
-					
-					$("#text").val("");
-					$("#messageFormeight").append(userHtml);
+<div class="main-wrapper">
+    <div class="app-window">
+        <!-- Left Sidebar (Deep Green) -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-title">CarePlus Medical</div>
+                        <div class="brand-subtitle">PATIENT ADVISORY PORTAL</div>
+                    </div>
+                </div>
 
-					$.ajax({
-						data: {
-							msg: rawText,	
-						},
-						type: "POST",
-						url: "/get",
-					}).done(function(data) {
-						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
-						$("#messageFormeight").append($.parseHTML(botHtml));
-					});
-					event.preventDefault();
-				});
-			});
-		</script>
+                <h1 class="hero-title">Your <span class="highlight">clinical</span> companion,<br>always on</h1>
+                <p class="hero-desc">Describe symptoms, ask clinical questions — get instant, evidence-based guidance.</p>
+
+                <div class="feature-cards">
+                    <div class="f-card">
+                        <div class="f-icon"><i class="fa-regular fa-clock"></i></div>
+                        <div class="f-text">
+                            <strong>Instant symptom check</strong>
+                            <span>Real-time evaluation based on clinical guidelines</span>
+                        </div>
+                    </div>
+                    <div class="f-card">
+                        <div class="f-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="f-text">
+                            <strong>100% confidential</strong>
+                            <span>Your health data is fully protected</span>
+                        </div>
+                    </div>
+                    <div class="f-card">
+                        <div class="f-icon"><i class="fa-regular fa-star"></i></div>
+                        <div class="f-text">
+                            <strong>Verified knowledge</strong>
+                            <span>Sourced from peer-reviewed clinical data</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-bottom">
+                <div class="emergency-box">
+                    <strong>Medical emergency?</strong>
+                    <p>Please call 911 or your local emergency number immediately.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Chat Area (Cream) -->
+        <main class="chat-area">
+            
+            <header class="chat-header">
+                <div class="header-left">
+                    <div class="h-avatar"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                    <div class="h-info">
+                        <h2>Clinical Assistant</h2>
+                        <span class="online-status"><span class="dot"></span> Available now</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn"><i class="fa-regular fa-clock"></i></button>
+                    <button class="icon-btn"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+            </header>
+
+            <div class="messages-container" id="chatHistory">
+                <!-- Initial Bot Message -->
+                <div class="msg bot-msg slide-in">
+                    <div class="msg-avatar bot-av"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                    <div class="msg-content">
+                        <div class="bubble">
+                            Hello! I'm your CarePlus clinical assistant. Describe your symptoms or ask a health question &mdash; I'm here to help.
+                        </div>
+                        <div class="msg-time">Just now</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="input-area">
+                <!-- Example Suggestions -->
+                <div class="suggestions">
+                    <button class="s-chip">Type 1 vs Type 2</button>
+                    <button class="s-chip">When to see a doctor</button>
+                    <button class="s-chip">Blood sugar levels</button>
+                    <button class="s-chip">Treatment options</button>
+                </div>
+                
+                <form id="chatForm" class="input-form">
+                    <div class="input-box">
+                        <div class="input-icon" id="attachBtn"><i class="fa-solid fa-paperclip"></i></div>
+                        <input type="file" id="fileInput" accept=".pdf,image/*" style="display:none;">
+                        <input type="text" id="userInput" placeholder="Ask about symptoms, treatments, or attach a document..." autocomplete="off" required>
+                        <button type="submit" id="sendBtn"><i class="fa-solid fa-arrow-up"></i></button>
+                    </div>
+                </form>
+            </footer>
+        </main>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    function formatTime() {
+        const date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        return hours + ":" + minutes + " " + ampm;
+    }
+
+    function scrollToBottom() {
+        const container = document.getElementById("chatHistory");
+        container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+
+    $("#attachBtn").click(function() {
+        $("#fileInput").click();
+    });
+
+    $("#fileInput").change(function() {
+        const fileName = $(this).val().split('\\').pop();
+        if(fileName) {
+            const currentVal = $("#userInput").val();
+            $("#userInput").val("[Attachment: " + fileName + "] " + currentVal);
+            $("#userInput").focus();
+        }
+    });
+
+    // Populate input when clicking suggestion chip
+    $(".s-chip").click(function() {
+        $("#userInput").val($(this).text());
+        $("#userInput").focus();
+    });
+
+    $("#chatForm").on("submit", function(event) {
+        event.preventDefault();
+        const rawText = $("#userInput").val().trim();
+        if (!rawText) return;
+
+        const timeStr = formatTime();
+
+        // 1. User Message (Using the "You" gray circle avatar style from the screenshot)
+        const userHtml = `
+            <div class="msg user-msg slide-in">
+                <div class="msg-content">
+                    <div class="bubble">${rawText.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                    <div class="msg-time">${timeStr}</div>
+                </div>
+                <div class="msg-avatar user-av">You</div>
+            </div>
+        `;
+
+        $("#chatHistory").append(userHtml);
+        $("#userInput").val("");
+        scrollToBottom();
+
+        // 2. Typing Indicator
+        const loaderId = "loader-" + Date.now();
+        const typingHtml = `
+            <div class="msg bot-msg slide-in" id="${loaderId}">
+                <div class="msg-avatar bot-av"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                <div class="msg-content">
+                    <div class="bubble typing">
+                        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+        $("#chatHistory").append(typingHtml);
+        scrollToBottom();
+
+        // 3. AJAX
+        const formData = new FormData();
+        formData.append("msg", rawText);
         
-    </body>
+        const fileInputElem = document.getElementById("fileInput");
+        if (fileInputElem.files.length > 0) {
+            formData.append("file", fileInputElem.files[0]);
+        }
+
+        $.ajax({
+            data: formData,
+            type: "POST",
+            url: "/get",
+            processData: false,
+            contentType: false,
+        }).done(function(data) {
+            $("#" + loaderId).remove();
+            $("#fileInput").val(""); // Clear file after send
+            
+            // Format newlines
+            const formatted = data.replace(/\n/g, "<br>");
+            
+            const botHtml = `
+                <div class="msg bot-msg slide-in">
+                    <div class="msg-avatar bot-av"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200&h=200" style="width:100%; height:100%; border-radius:50%; object-fit:cover;"></div>
+                    <div class="msg-content">
+                        <div class="bubble">${formatted}</div>
+                        <div class="msg-time">${formatTime()}</div>
+                    </div>
+                </div>
+            `;
+            $("#chatHistory").append(botHtml);
+            scrollToBottom();
+        }).fail(function() {
+            $("#" + loaderId).remove();
+            $("#fileInput").val("");
+            const errHtml = `
+                <div class="msg bot-msg slide-in">
+                    <div class="msg-avatar bot-av"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="msg-content">
+                        <div class="bubble err-bubble">Could not connect to medical intelligence server.</div>
+                        <div class="msg-time">${formatTime()}</div>
+                    </div>
+                </div>
+            `;
+            $("#chatHistory").append(errHtml);
+            scrollToBottom();
+        });
+    });
+});
+</script>
+
+</body>
 </html>

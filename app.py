@@ -11,6 +11,7 @@ import os
 
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
 load_dotenv()
@@ -57,14 +58,42 @@ def index():
 
 @app.route("/get", methods=["GET", "POST"])
 def chat():
-    msg = request.form["msg"]
-    input = msg
-    print(input)
-    response = rag_chain.invoke({"input": msg})
-    print("Response : ", response["answer"])
-    return str(response["answer"])
+    msg = request.form.get("msg", "")
+    file = request.files.get("file")
+    
+    if file and file.filename != '':
+        import tempfile
+        import textwrap
+        from langchain_community.document_loaders import PyPDFLoader
+        
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            file.save(tmp.name)
+            try:
+                loader = PyPDFLoader(tmp.name)
+                docs = loader.load()
+                pdf_text = " ".join([d.page_content for d in docs])
+                pdf_text = textwrap.shorten(pdf_text, width=15000, placeholder="... [Document Trimmed]")
+                
+                custom_prompt = ChatPromptTemplate.from_messages([
+                    ("system", system_prompt + "\n\n[USER REFERENCE DOCUMENT]\n{context}\n\nUse this document to help answer the user's question."),
+                    ("human", "{question}")
+                ])
+                custom_chain = custom_prompt | chatModel
+                response = custom_chain.invoke({"context": pdf_text, "question": msg})
+                ans = response.content
+            except Exception as e:
+                ans = f"Error processing uploaded document: {str(e)}"
+            finally:
+                os.remove(tmp.name)
+    else:
+        # Standard Pinecone QA
+        response = rag_chain.invoke({"input": msg})
+        ans = response["answer"]
+        
+    print("Response : ", ans)
+    return str(ans)
 
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port= 8080, debug= True)
+    app.run(host="0.0.0.0", port=8080, debug=False)
